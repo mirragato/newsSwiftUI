@@ -39,7 +39,7 @@ final class NetworkManager {
     func request<T: Decodable>(requestBuilder: RequestBuilder,
                                onSuccess: @escaping (T) -> Void,
                                onError: @escaping (Error) -> Void) {
-        sessionManager.request(requestBuilder).responseData(completionHandler: { [unowned self] (response) in
+        sessionManager.request(requestBuilder).responseData(completionHandler: { response in
             switch response.result {
             case .success(let data):
                 do {
