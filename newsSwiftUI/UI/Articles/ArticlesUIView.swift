@@ -2,32 +2,39 @@ import SwiftUI
 
 struct ArticlesUIView: View {
     @ObservedObject var viewModel = ArticlesViewModel()
+    @State var showLoadText = false
+    var loadText = Text(String.loading)
     
     init(category: Categories) {
         viewModel.category = category
         UITableView.appearance().tableFooterView = UIView()
+        self.viewModel.loadArticles()
     }
 
     var body: some View {
-        content
-            .navigationBarTitle(viewModel.category?.rawValue ?? "")
-            .onAppear {
-                    self.viewModel.loadArticles()
+        VStack {
+            list
+            content
+                .navigationBarTitle(viewModel.category?.rawValue ?? "")
+            if showLoadText {
+                loadText
             }
+        }
     }
 
     private var content: some View {
         switch viewModel.state {
         case .loading:
-            return Text(String.loading).eraseToAnyView()
+            return loadText.eraseToAnyView()
         case .error(let error):
             return Text(error.localizedDescription).eraseToAnyView()
-        case .loaded(let articles):
-            return list(of: articles).eraseToAnyView()
+        case .loaded:
+            return Text("").eraseToAnyView()
+            
         }
     }
 
-    private func list(of articles: [Article]) -> some View {
+    private var list: some View {
         return List(viewModel.articles) { article in
             NavigationLink(destination: WebUIView(url: article.url)) {
                 ArticleRowView(article: article)
@@ -41,6 +48,10 @@ struct ArticlesUIView: View {
         let isLast = self.viewModel.articles.last == article
         if isLast {
             self.viewModel.loadMoreArticles()
+        }
+        DispatchQueue.main.async {
+            self.showLoadText
+                = isLast
         }
         return isLast
     }
