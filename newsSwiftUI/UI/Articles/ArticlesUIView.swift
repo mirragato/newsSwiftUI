@@ -2,8 +2,6 @@ import SwiftUI
 
 struct ArticlesUIView: View {
     @ObservedObject var viewModel = ArticlesViewModel()
-    @State var showLoadText = false
-    var loadText = Text(String.loading)
     
     init(category: Categories) {
         viewModel.category = category
@@ -16,16 +14,13 @@ struct ArticlesUIView: View {
             list
             content
                 .navigationBarTitle(viewModel.category?.rawValue ?? "")
-            if showLoadText {
-                loadText
-            }
         }
     }
 
     private var content: some View {
         switch viewModel.state {
         case .loading:
-            return loadText.eraseToAnyView()
+            return Text(String.loading).eraseToAnyView()
         case .error(let error):
             return Text(error.localizedDescription).eraseToAnyView()
         case .loaded:
@@ -48,10 +43,6 @@ struct ArticlesUIView: View {
         let isLast = self.viewModel.articles.last == article
         if isLast {
             self.viewModel.loadMoreArticles()
-        }
-        DispatchQueue.main.async {
-            self.showLoadText
-                = isLast
         }
         return isLast
     }

@@ -7,10 +7,12 @@ class ArticlesViewModel: ObservableObject {
     @Published private(set) var state: State = .loading
     var category: Categories?
     let networkManager = NewsManager()
+    private var totalResult = 0
     
     func loadArticles() {
         networkManager.getArticles(category: category ?? .all, onSuccess: { [weak self] list in
             self?.articles = list.articles
+            self?.totalResult = list.totalResults
             self?.state = .loaded
         }) { [weak self] error in
             self?.state = .error(error)
@@ -18,6 +20,7 @@ class ArticlesViewModel: ObservableObject {
     }
 
     func loadMoreArticles() {
+        guard totalResult > articles.count else { return }
         if case .loading = state { return }
         state = .loading
         let page = (articles.count / 10) + 1

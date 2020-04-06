@@ -49,7 +49,6 @@ final class NetworkManager {
                     onError(error)
                 }
             case .failure(let error):
-                guard error.localizedDescription != "cancelled" else { return }
                 onError(error)
             }
         })
