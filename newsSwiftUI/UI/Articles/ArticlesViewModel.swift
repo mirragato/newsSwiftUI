@@ -3,11 +3,7 @@ import Combine
 
 class ArticlesViewModel: ObservableObject {
     
-    @Published var articles: [Article] = [] {
-        didSet {
-            self.state = .loaded
-        }
-    }
+    @Published var articles: [Article] = []
     @Published private(set) var state: State = .loading
     var category: Categories = .all
     private let networkManager = NetworkManager<NewsRequest>()
@@ -15,6 +11,7 @@ class ArticlesViewModel: ObservableObject {
     private var cancellableSet = Set<AnyCancellable>()
     
     func loadArticles() {
+        articles = []
         sendRequest()
     }
 
@@ -29,11 +26,16 @@ class ArticlesViewModel: ObservableObject {
     private func sendRequest(for page: Int = 1) {
         networkManager.request(requestBuilder: .getArticles(page: page, category: category))
         .decode(type: ArticlesList.self, decoder: JSONDecoder())
-        .map { $0.articles }
-        .append(articles)
-        .replaceError(with: [])
+        .map { list in
+            DispatchQueue.main.async {
+                self.articles.append(contentsOf: list.articles)
+            }
+            self.totalResult = list.totalResults
+            return .loaded
+        }
+        .replaceError(with: .loaded)
         .receive(on: RunLoop.main)
-        .assign(to: \.articles, on: self)
+        .assign(to: \.state, on: self)
         .store(in: &cancellableSet)
     }
 }
