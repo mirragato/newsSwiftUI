@@ -1,3 +1,0 @@
-// MARK: - API
-
-struct API {}

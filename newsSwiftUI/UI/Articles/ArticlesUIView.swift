@@ -13,7 +13,7 @@ struct ArticlesUIView: View {
         VStack {
             list
             content
-                .navigationBarTitle(viewModel.category?.rawValue ?? "")
+                .navigationBarTitle(viewModel.category.rawValue)
         }
     }
 

@@ -3,20 +3,19 @@ import Combine
 
 class ArticlesViewModel: ObservableObject {
     
-    @Published var articles: [Article] = []
+    @Published var articles: [Article] = [] {
+        didSet {
+            self.state = .loaded
+        }
+    }
     @Published private(set) var state: State = .loading
-    var category: Categories?
-    let networkManager = NewsManager()
+    var category: Categories = .all
+    private let networkManager = NetworkManager<NewsRequest>()
     private var totalResult = 0
+    private var cancellableSet = Set<AnyCancellable>()
     
     func loadArticles() {
-        networkManager.getArticles(category: category ?? .all, onSuccess: { [weak self] list in
-            self?.articles = list.articles
-            self?.totalResult = list.totalResults
-            self?.state = .loaded
-        }) { [weak self] error in
-            self?.state = .error(error)
-        }
+        sendRequest()
     }
 
     func loadMoreArticles() {
@@ -24,12 +23,18 @@ class ArticlesViewModel: ObservableObject {
         if case .loading = state { return }
         state = .loading
         let page = (articles.count / 10) + 1
-        networkManager.getMoreArticles(page: page, category: category ?? .all, onSuccess: { [weak self] list in
-            self?.articles.append(contentsOf: list.articles)
-            self?.state = .loaded
-        }) { [weak self] error in
-            self?.state = .error(error)
-        }
+        sendRequest(for: page)
+    }
+
+    private func sendRequest(for page: Int = 1) {
+        networkManager.request(requestBuilder: .getArticles(page: page, category: category))
+        .decode(type: ArticlesList.self, decoder: JSONDecoder())
+        .map { $0.articles }
+        .append(articles)
+        .replaceError(with: [])
+        .receive(on: RunLoop.main)
+        .assign(to: \.articles, on: self)
+        .store(in: &cancellableSet)
     }
 }
 
