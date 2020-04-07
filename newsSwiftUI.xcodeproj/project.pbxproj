@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -74,7 +74,6 @@
 			children = (
 				2A19FCCE243611A6007B00EA /* newsSwiftUI */,
 				2A19FCCD243611A6007B00EA /* Products */,
-				C01878826413972A5B412F5C /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -186,13 +185,6 @@
 				2A57A4AA24378B0B00F4EAD7 /* WebUIView.swift */,
 			);
 			path = Web;
-			sourceTree = "<group>";
-		};
-		C01878826413972A5B412F5C /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
