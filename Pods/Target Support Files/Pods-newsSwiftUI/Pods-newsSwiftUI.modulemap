@@ -1,6 +1,0 @@
-framework module Pods_newsSwiftUI {
-  umbrella header "Pods-newsSwiftUI-umbrella.h"
-
-  export *
-  module * { export * }
-}
