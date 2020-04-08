@@ -10,10 +10,13 @@ struct URLImage: View {
     }
 
     private var image: some View {
-        Image(uiImage: remoteImage.image ?? #imageLiteral(resourceName: "default"))
-            .resizable()
-            .clipShape(RoundedRectangle(cornerRadius: 10))
-            .shadow(color: .blue, radius: 1, x: 0, y: 0)
+        GeometryReader { geometry in
+            Image(uiImage: self.remoteImage.image ?? #imageLiteral(resourceName: "default"))
+                .resizable()
+                .clipShape(RoundedRectangle(cornerRadius: 10))
+                .shadow(color: .blue, radius: 1, x: 0, y: 0)
+                .frame(width: geometry.size.width, height: geometry.size.width * 0.75)
+        }
     }
 
     var body: some View {
@@ -41,5 +44,11 @@ class RemoteImage: ObservableObject {
             .replaceError(with: #imageLiteral(resourceName: "default"))
             .receive(on: DispatchQueue.main)
             .assign(to: \.image, on: self)
+    }
+}
+
+struct URLImage_Previews: PreviewProvider {
+    static var previews: some View {
+        URLImage(stringForURL: nil)
     }
 }

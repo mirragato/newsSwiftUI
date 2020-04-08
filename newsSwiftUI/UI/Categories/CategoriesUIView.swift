@@ -5,14 +5,20 @@ struct CategoriesUIView: View {
 
     init(viewModel: CategoriesViewModel) {
         self.viewModel = viewModel
+        UITableView.appearance().tableFooterView = UIView()
+        UITableView.appearance().separatorStyle = .none
     }
 
     var body: some View {
         NavigationView {
-            List(viewModel.categories, id: \.rawValue) { CategoryRowView(category: $0)
+            List(viewModel.categories, id: \.rawValue) { category in
+                VStack {
+                    CategoryRowView(category: category)
+                    Divider()
+                }
             }
                 .navigationBarTitle(Text(String.choose), displayMode: .large)
-            .onAppear { UITableView.appearance().tableFooterView = UIView() }
+            
         }
     }
 }

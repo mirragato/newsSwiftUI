@@ -12,26 +12,32 @@ struct ArticleRowView: View {
 
     var body: some View {
         NavigationLink(destination: WebUIView(url: self.article.url)) {
-            VStack {
+            VStack(alignment: .leading) {
                 VStack(alignment: .center) {
                     URLImage(stringForURL: self.article.image)
-                        .scaledToFit()
+                        .scaledToFill()
                     VStack(alignment: .leading) {
                         Text(self.article.title)
                             .font(.headline)
-                            .padding([.top, .bottom], 10)
+                            .padding(.bottom, 10)
                         Text(self.textValue)
                             .foregroundColor(.gray)
                             .font(.subheadline)
+                            .padding(.bottom, 10)
                     }
                     Spacer()
                 }
-                .padding()
-                }
-            .frame(maxHeight: 400, alignment: .top)
+            }
         }
+        .padding(.all, 20)
+        .overlay(
+            RoundedRectangle(cornerRadius: 16)
+                .stroke(Color.gray.opacity(0.5), lineWidth: 0.5)
+                .shadow(radius: 1)
+        )
     }
 }
+
 
 #if DEBUG
 struct ArticleRowView_Previews: PreviewProvider {
