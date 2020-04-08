@@ -6,7 +6,6 @@ struct ArticlesUIView: View {
     init(category: Categories) {
         viewModel.category = category
         UITableView.appearance().tableFooterView = UIView()
-        self.viewModel.loadArticles()
     }
 
     var body: some View {
@@ -21,8 +20,6 @@ struct ArticlesUIView: View {
         switch viewModel.state {
         case .loading:
             return Text(String.loading).eraseToAnyView()
-        case .error(let error):
-            return Text(error.localizedDescription).eraseToAnyView()
         case .loaded:
             return Text("").eraseToAnyView()
             
@@ -31,11 +28,12 @@ struct ArticlesUIView: View {
 
     private var list: some View {
         return List(viewModel.articles) { article in
-            NavigationLink(destination: WebUIView(url: article.url)) {
-                ArticleRowView(article: article)
-            }
-            
+            ArticleRowView(article: article)
+
             if self.isLast(article: article) {}
+        }.onAppear {
+            guard self.viewModel.articles.isEmpty else { return }
+            self.viewModel.loadArticles()
         }
     }
 

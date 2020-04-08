@@ -44,6 +44,5 @@ extension ArticlesViewModel {
     enum State {
         case loading
         case loaded
-        case error(Error)
     }
 }

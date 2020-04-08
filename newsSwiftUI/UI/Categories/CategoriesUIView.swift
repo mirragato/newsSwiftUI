@@ -9,10 +9,7 @@ struct CategoriesUIView: View {
 
     var body: some View {
         NavigationView {
-            List(viewModel.categories, id: \.rawValue) { category in
-                NavigationLink(destination: ArticlesUIView(category: category)) {
-                    CategoryRowView(category: category)
-                }
+            List(viewModel.categories, id: \.rawValue) { CategoryRowView(category: $0)
             }
                 .navigationBarTitle(Text(String.choose), displayMode: .large)
             .onAppear { UITableView.appearance().tableFooterView = UIView() }

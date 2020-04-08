@@ -161,9 +161,9 @@
 		2A19FD22243740D3007B00EA /* Categories */ = {
 			isa = PBXGroup;
 			children = (
-				2A19FD2024373E40007B00EA /* CategoriesViewModel.swift */,
-				2A19FCD3243611A6007B00EA /* CategoriesUIView.swift */,
 				2A19FCEC243613E0007B00EA /* CategoryRowView.swift */,
+				2A19FCD3243611A6007B00EA /* CategoriesUIView.swift */,
+				2A19FD2024373E40007B00EA /* CategoriesViewModel.swift */,
 			);
 			path = Categories;
 			sourceTree = "<group>";

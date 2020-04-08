@@ -4,12 +4,14 @@ struct CategoryRowView: View {
     var category: Categories
 
     var body: some View {
-        GeometryReader { geometry in
-            Text(self.category.rawValue)
-                .foregroundColor(.blue)
-                .bold()
-                .padding()
-                .frame(alignment: .center)
+        NavigationLink(destination: ArticlesUIView(category: category)) {
+            GeometryReader { geometry in
+                Text(self.category.rawValue)
+                    .foregroundColor(.blue)
+                    .bold()
+                    .padding()
+                    .frame(alignment: .center)
+            }
         }
     }
 }

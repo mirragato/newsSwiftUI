@@ -11,23 +11,25 @@ struct ArticleRowView: View {
     }
 
     var body: some View {
-        VStack {
-            VStack(alignment: .center) {
-                URLImage(stringForURL: self.article.image)
-                    .scaledToFit()
-                VStack(alignment: .leading) {
-                    Text(self.article.title)
-                        .font(.headline)
-                        .padding([.top, .bottom], 10)
-                    Text(self.textValue)
-                        .foregroundColor(.gray)
-                        .font(.subheadline)
+        NavigationLink(destination: WebUIView(url: self.article.url)) {
+            VStack {
+                VStack(alignment: .center) {
+                    URLImage(stringForURL: self.article.image)
+                        .scaledToFit()
+                    VStack(alignment: .leading) {
+                        Text(self.article.title)
+                            .font(.headline)
+                            .padding([.top, .bottom], 10)
+                        Text(self.textValue)
+                            .foregroundColor(.gray)
+                            .font(.subheadline)
+                    }
+                    Spacer()
                 }
-                Spacer()
-            }
-            .padding()
+                .padding()
+                }
+            .frame(maxHeight: 400, alignment: .top)
         }
-        .frame(maxHeight: 400, alignment: .top)
     }
 }
 
