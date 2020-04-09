@@ -10,12 +10,12 @@ struct URLImage: View {
     }
 
     private var image: some View {
-        GeometryReader { geometry in
+        GeometryReader { _ in
             Image(uiImage: self.remoteImage.image ?? #imageLiteral(resourceName: "default"))
                 .resizable()
                 .clipShape(RoundedRectangle(cornerRadius: 10))
                 .shadow(color: .blue, radius: 1, x: 0, y: 0)
-                .frame(width: geometry.size.width, height: geometry.size.width * 0.75)
+                .aspectRatio(4/3, contentMode: .fit)
         }
     }
 
