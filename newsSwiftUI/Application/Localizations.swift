@@ -14,6 +14,8 @@ extension Localizations {
     static var choose = "Choose".localizedString
     static var loading = "Loading".localizedString
     static var errorWrong = "ErrorWrong".localizedString
+    static var cancel = "Cancel".localizedString
+    static var search = "search".localizedString
 }
 
 private class MockClassInBundle {}

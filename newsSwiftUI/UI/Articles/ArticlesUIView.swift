@@ -2,6 +2,8 @@ import SwiftUI
 
 struct ArticlesUIView: View {
     @ObservedObject var viewModel = ArticlesViewModel()
+    @State private var searchText = ""
+    @State private var showCancelButton: Bool = false
     
     init(category: Categories) {
         viewModel.category = category
@@ -10,6 +12,38 @@ struct ArticlesUIView: View {
 
     var body: some View {
         VStack {
+            // Search view
+            HStack {
+                HStack {
+                    Image(systemName: "magnifyingglass")
+                    TextField(String.search, text: Binding(
+                             get: {
+                                return self.searchText
+                               },
+                             set: { newValue in
+                                self.viewModel.loadArticles(searchText: newValue)
+                                        return self.searchText = newValue
+                              }
+                    ), onEditingChanged: { isEditing in
+                        self.showCancelButton = isEditing
+                    }).foregroundColor(.primary)
+
+                    Button(action: {
+                        self.searchText = ""
+                        self.showCancelButton = false
+                    }) {
+                        Image(systemName: "xmark.circle.fill").opacity(searchText == "" ? 0 : 1)
+                    }
+                }
+                    .padding(.all, 8)
+                    .foregroundColor(.secondary)
+                    .background(Color(.secondarySystemBackground))
+                    .cornerRadius(10)
+            }
+            .padding()
+            .navigationBarHidden(showCancelButton)
+
+            // List content
             list
             content
                 .navigationBarTitle(viewModel.category.rawValue)

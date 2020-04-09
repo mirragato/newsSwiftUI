@@ -10,9 +10,9 @@ class ArticlesViewModel: ObservableObject {
     private var totalResult = 0
     private var cancellableSet = Set<AnyCancellable>()
     
-    func loadArticles() {
+    func loadArticles(searchText: String? = nil) {
         articles = []
-        sendRequest()
+        sendRequest(searchText: searchText ?? "")
     }
 
     func loadMoreArticles() {
@@ -23,8 +23,8 @@ class ArticlesViewModel: ObservableObject {
         sendRequest(for: page)
     }
 
-    private func sendRequest(for page: Int = 1) {
-        networkManager.request(requestBuilder: .getArticles(page: page, category: category))
+    private func sendRequest(for page: Int = 1, searchText: String = "") {
+        networkManager.request(requestBuilder: .getArticles(page: page, searchText: searchText, category: category))
         .decode(type: ArticlesList.self, decoder: JSONDecoder())
         .map { list in
             DispatchQueue.main.async {

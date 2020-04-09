@@ -3,7 +3,7 @@ import Foundation
 // MARK: - NewsRequest
 
 enum NewsRequest: RequestBuilder {
-    case getArticles(page: Int, category: Categories)
+    case getArticles(page: Int, searchText: String, category: Categories)
 
     fileprivate struct Constants {
         static let countryID = "de"
@@ -13,6 +13,7 @@ enum NewsRequest: RequestBuilder {
         static let pageSize = "pageSize"
         static let pageSizeValue = 10
         static let page = "page"
+        static let keyWord = "q"
         static let category = "category"
     }
 
@@ -25,12 +26,13 @@ enum NewsRequest: RequestBuilder {
 
     var queryParameters: [URLQueryItem]? {
         switch self {
-        case .getArticles(let page, let category):
+        case .getArticles(let page, let searchText, let category):
             return [
                 URLQueryItem(name: Constants.apiKey, value: Constants.apiKeyID),
                 URLQueryItem(name: Constants.country, value: Constants.countryID),
                 URLQueryItem(name: Constants.pageSize, value: String(Constants.pageSizeValue)),
                 URLQueryItem(name: Constants.page, value: String(page)),
+                URLQueryItem(name: Constants.keyWord, value: searchText),
                 URLQueryItem(name: Constants.category, value: category == .all ? "" : category.rawValue)]
         }
     }
